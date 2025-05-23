@@ -4,11 +4,10 @@ import json
 import os
 
 app = Flask(__name__)
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "temporary-secret-key") 
+REGION = os.getenv("AWS_REGION", "us-east-1")
+client = boto3.client("bedrock-runtime", region_name=REGION)
 
-# Create the Bedrock Runtime client
-client = boto3.client("bedrock-runtime", region_name="us-east-1")  # adjust if needed
-
-# Simple in-memory session tracking (note: won't persist across App Runner restarts)
 conversation_history = []
 
 @app.route("/")
@@ -25,10 +24,10 @@ def chat():
     # Append user message to conversation history
     conversation_history.append(f"Human: {user_input}")
 
-    # Build prompt from full history
+    # Build prompt from conversation history
     prompt = "\n".join(conversation_history) + "\nAssistant:"
 
-    # Construct the body payload
+    # Construct Bedrock payload
     body = {
         "prompt": prompt,
         "max_tokens_to_sample": 300,
@@ -47,15 +46,17 @@ def chat():
         result = json.loads(response["body"].read())
         bot_response = result["completion"].strip()
 
-        # Append assistant reply to conversation history
+        # Append assistant reply to history
         conversation_history.append(f"Assistant: {bot_response}")
 
         return jsonify({"response": bot_response})
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
+        return jsonify({
+            "error": "Failed to invoke model",
+            "detail": str(e)
+        }), 500
 
 if __name__ == "__main__":
-    # For local testing
-    app.run(host="0.0.0.0", port=5001)
+    port = int(os.getenv("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
