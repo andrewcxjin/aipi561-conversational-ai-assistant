@@ -32,13 +32,13 @@ def chat():
     body = {
         "prompt": prompt,
         "max_tokens_to_sample": 300,
-        "temperature": 0.7,
+        "temperature": 0.5,
         "stop_sequences": ["\nHuman:"]
     }
 
     try:
         response = client.invoke_model(
-            modelId="anthropic.claude-3-sonnet-20240229-v1:0", 
+            modelId="anthropic.claude-v2:1", 
             body=json.dumps(body),
             contentType="application/json",
             accept="application/json"
