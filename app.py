@@ -5,10 +5,6 @@ import os
 
 app = Flask(__name__)
 REGION = os.getenv("AWS_REGION", "us-east-1")
-PROMPT = os.getenv(
-    "BEDROCK_PROMPT_ARN",
-    "arn:aws:bedrock:us-east-1:381492212823:prompt-router/e2nmuu4dw3ai"
-)
 client = boto3.client("bedrock-runtime", region_name=REGION)
 
 conversation_history = []
@@ -87,7 +83,7 @@ def chat():
 
     try:
         response = client.invoke_model(
-            modelId=PROMPT, 
+            modelId="anthropic.claude-v2:1", 
             body=json.dumps(body),
             contentType="application/json",
             accept="application/json"
