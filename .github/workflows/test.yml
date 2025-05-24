@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -27,8 +30,4 @@ jobs:
 
       - name: Run tests with coverage
         run: |
-          pytest --cov=app.py --cov-report=term-missing
-
-      - name: Fail if coverage < 80%
-        run: |
-          coverage report --fail-under=80
+          pytest --cov=app.py --cov-report=term-missing --cov-fail-under=80
