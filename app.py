@@ -4,7 +4,6 @@ import json
 import os
 
 app = Flask(__name__)
-app.secret_key = os.getenv("FLASK_SECRET_KEY", "temporary-secret-key") 
 REGION = os.getenv("AWS_REGION", "us-east-1")
 client = boto3.client("bedrock-runtime", region_name=REGION)
 

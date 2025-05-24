@@ -1,1 +1,0 @@
-{"messages": [{"role": "user", "content": "Hello, how are you?"}, {"role": "assistant", "content": "'Bedrock' object has no attribute 'invoke_model'"}, {"role": "user", "content": "Hello, how are you?"}, {"role": "assistant", "content": "'Bedrock' object has no attribute 'invoke_model'"}]}
