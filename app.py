@@ -3,8 +3,6 @@ import boto3
 import json
 import os
 
-print("app.py loaded")
-
 app = Flask(__name__)
 REGION = os.getenv("AWS_REGION", "us-east-1")
 client = boto3.client("bedrock-runtime", region_name=REGION)
